@@ -4,7 +4,7 @@ A modern, multi-language code editor built with **React** that supports live pre
 
 ![Code Editor](./public/readme.png)
 
-## 🔗 [Visit the Live Project ✨](https://webdev-playground.netlify.app/)
+## 🔗 [Visit the Live Project ✨](https://milind-code-editor.netlify.app/)
 
 <br>
 
