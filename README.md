@@ -43,13 +43,20 @@ A modern, full-stack collaborative code playground built with **React**, **Node.
 
 ## ✨ Features
 
-- 🧠 **Multi-Language Web Sandbox**: Instant live rendering for HTML, CSS, and JavaScript.
+- 🧠 **Multi-Language Web Sandbox**: Instant live rendering for programming languages
+
 - 👥 **Real-Time Collaborative Coding**: Create protected developer rooms, share unique links, and code together live. Features automatic cursor synchronization and room administrative controls (admins can delete rooms).
+
 - 🔑 **Secure Authentication**: User sign-up and sign-in powered by JWT. Ensures that only authorized users can create collaborative rooms, open the AI assistant, or download their projects.
+
 - 🤖 **Myra — Streaming AI Assistant**: An integrated AI developer companion powered by Google Gemini. Myra streams code answers chunk-by-chunk and directly injects/updates HTML, CSS, and JS blocks in your playground.
+
 - 💾 **Persisted Chat History**: Conversation histories with Myra are saved securely in MongoDB. Load, continue, or delete past chat rooms at any time.
+
 - 🔀 **Flexible Layouts & Dark Mode**: Seamlessly switch between Split and Tabbed editor layouts. Toggle dark/light theme dynamically.
+
 - 📁 **Download Project Bundle**: Package and download your work with a single click. Bundles your playground code into clean `index.html`, `style.css`, and `script.js` files.
+
 - 🔔 **Interactive Toast Notifications**: Context-driven notifications for actions such as room joining, session logging, and network errors.
 
 ---
