@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import CodeEditor from './CodeEditor';
 import Preview from './Preview';
 import AIAssistant from './AIAssistant';
+import ErrorBoundary from './ErrorBoundary';
 import { useEditor } from '../context/EditorContext';
 import { FaCode, FaEye, FaRobot } from 'react-icons/fa';
 
@@ -27,13 +28,19 @@ const Layout = () => {
     const renderEditors = () => (
         <>
             <div className="editor-pane">
-                <CodeEditor language="html" value={html} onChange={setHtml} theme={theme} />
+                <ErrorBoundary>
+                    <CodeEditor language="html" value={html} onChange={setHtml} theme={theme} />
+                </ErrorBoundary>
             </div>
             <div className="editor-pane">
-                <CodeEditor language="css" value={css} onChange={setCss} theme={theme} />
+                <ErrorBoundary>
+                    <CodeEditor language="css" value={css} onChange={setCss} theme={theme} />
+                </ErrorBoundary>
             </div>
             <div className="editor-pane" style={{ borderRight: 'none' }}>
-                <CodeEditor language="javascript" value={js} onChange={setJs} theme={theme} />
+                <ErrorBoundary>
+                    <CodeEditor language="javascript" value={js} onChange={setJs} theme={theme} />
+                </ErrorBoundary>
             </div>
         </>
     );
@@ -52,9 +59,11 @@ const Layout = () => {
                 ))}
             </div>
             <div className="tab-content">
-                {activeTab === 'html' && <CodeEditor language="html" value={html} onChange={setHtml} theme={theme} />}
-                {activeTab === 'css' && <CodeEditor language="css" value={css} onChange={setCss} theme={theme} />}
-                {activeTab === 'javascript' && <CodeEditor language="javascript" value={js} onChange={setJs} theme={theme} />}
+                <ErrorBoundary>
+                    {activeTab === 'html' && <CodeEditor language="html" value={html} onChange={setHtml} theme={theme} />}
+                    {activeTab === 'css' && <CodeEditor language="css" value={css} onChange={setCss} theme={theme} />}
+                    {activeTab === 'javascript' && <CodeEditor language="javascript" value={js} onChange={setJs} theme={theme} />}
+                </ErrorBoundary>
             </div>
         </div>
     );
@@ -94,7 +103,11 @@ const Layout = () => {
                 <div className="mobile-panel-content">
                     {mobilePanel === 'editor' && renderTabbedEditors()}
                     {mobilePanel === 'preview' && <Preview html={html} css={css} js={js} />}
-                    {mobilePanel === 'ai' && layout === 'ai' && <AIAssistant />}
+                    {mobilePanel === 'ai' && layout === 'ai' && (
+                        <ErrorBoundary>
+                            <AIAssistant />
+                        </ErrorBoundary>
+                    )}
                     {/* If not in AI layout but user somehow is on AI panel, show editor */}
                     {mobilePanel === 'ai' && layout !== 'ai' && renderTabbedEditors()}
                 </div>
@@ -116,7 +129,9 @@ const Layout = () => {
                         </div>
                     </div>
                     <div className="ai-assistant-panel">
-                        <AIAssistant />
+                        <ErrorBoundary>
+                            <AIAssistant />
+                        </ErrorBoundary>
                     </div>
                 </>
             ) : (

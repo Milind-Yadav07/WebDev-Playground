@@ -1,10 +1,12 @@
 import React from 'react';
-import { FaMoon, FaSun, FaColumns, FaTable, FaSignOutAlt, FaTrash } from 'react-icons/fa';
+import { FaMoon, FaSun, FaColumns, FaTable, FaSignOutAlt, FaTrash, FaUser, FaSignInAlt } from 'react-icons/fa';
 import { useEditor } from '../context/EditorContext';
+import { useRoom } from '../context/RoomContext';
 import HamburgerMenu from './HamburgerMenu';
 
 const Navbar = () => {
-    const { theme, toggleTheme, layout, setLayout, roomId, leaveRoom, deleteRoom, isAdmin } = useEditor();
+    const { theme, toggleTheme, layout, setLayout } = useEditor();
+    const { roomId, leaveRoom, deleteRoom, isAdmin, user, logout, setIsAuthModalOpen } = useRoom();
 
 
     return (
@@ -14,6 +16,50 @@ const Navbar = () => {
             </div>
 
             <div className="navbar-actions">
+                {/* User Authentication Status */}
+                {user ? (
+                    <div className="user-badge" style={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: '0.5rem',
+                        background: 'var(--editor-bg)',
+                        padding: '0.4rem 0.8rem',
+                        borderRadius: '20px',
+                        border: '1px solid var(--border-color)',
+                        fontSize: '0.8rem',
+                        fontWeight: '600'
+                    }}>
+                        <FaUser style={{ color: 'var(--primary-color)' }} />
+                        <span style={{ color: 'var(--text-color)' }}>{user.username}</span>
+                        <button 
+                            onClick={logout} 
+                            style={{
+                                background: 'transparent',
+                                border: 'none',
+                                color: 'var(--secondary-color)',
+                                cursor: 'pointer',
+                                padding: '2px',
+                                display: 'flex',
+                                alignItems: 'center',
+                                transition: 'color 0.2s'
+                            }}
+                            onMouseOver={(e) => e.currentTarget.style.color = '#ef4444'}
+                            onMouseOut={(e) => e.currentTarget.style.color = 'var(--secondary-color)'}
+                            title="Log Out"
+                        >
+                            <FaSignOutAlt />
+                        </button>
+                    </div>
+                ) : (
+                    <button 
+                        onClick={() => setIsAuthModalOpen(true)}
+                        className="login-navbar-btn"
+                        title="Log In / Sign Up"
+                    >
+                        <span>Log In</span>
+                    </button>
+                )}
+
                 {/* Room Status & Leave Button - Only visible when in a room */}
                 {roomId && (
                     <div className="room-status" style={{ display: 'flex', gap: '0.8rem', alignItems: 'center' }}>

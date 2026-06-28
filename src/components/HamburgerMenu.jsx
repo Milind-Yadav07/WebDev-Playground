@@ -1,11 +1,14 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { FaDownload, FaMagic, FaPlus, FaSignInAlt, FaHistory, FaDoorOpen } from 'react-icons/fa';
 import { useEditor } from '../context/EditorContext';
+import { useRoom } from '../context/RoomContext';
 import ShareModal from './ShareModal';
 import JoinModal from './JoinModal';
+import { BASE_URL } from '../api/config';
 
 const HamburgerMenu = () => {
-    const { layout, setLayout, html, css, js, joinRoom, createRoom, persistentAdminId } = useEditor();
+    const { layout, setLayout, html, css, js } = useEditor();
+    const { joinRoom, createRoom, user, setIsAuthModalOpen } = useRoom();
     const [isDownloading, setIsDownloading] = useState(false);
     const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
     const [isModalOpen, setIsModalOpen] = useState(false);
@@ -16,9 +19,17 @@ const HamburgerMenu = () => {
     const menuRef = useRef(null);
 
     const fetchMyRooms = async () => {
+        if (!user) {
+            setMyRooms([]);
+            return;
+        }
         setIsLoadingRooms(true);
         try {
-            const response = await fetch(`http://localhost:5000/api/rooms/my-rooms/${persistentAdminId}`);
+            const response = await fetch(`${BASE_URL}/api/rooms/my-rooms/${user.id}`, {
+                headers: {
+                    'Authorization': `Bearer ${user.token}`
+                }
+            });
             if (response.ok) {
                 const data = await response.json();
                 setMyRooms(data);
@@ -34,13 +45,18 @@ const HamburgerMenu = () => {
         if (mobileMenuOpen) {
             fetchMyRooms();
         }
-    }, [mobileMenuOpen]);
+    }, [mobileMenuOpen, user]);
 
     const generateRoomId = () => {
         return Math.random().toString(36).substring(2, 11);
     };
 
     const handleCreateRoom = async () => {
+        if (!user) {
+            setMobileMenuOpen(false);
+            setIsAuthModalOpen(true);
+            return;
+        }
         const newRoomId = generateRoomId();
         const result = await createRoom(newRoomId);
         if (result.success) {
@@ -52,6 +68,11 @@ const HamburgerMenu = () => {
     };
 
     const handleJoinRoom = () => {
+        if (!user) {
+            setMobileMenuOpen(false);
+            setIsAuthModalOpen(true);
+            return;
+        }
         setIsJoinModalOpen(true);
         setMobileMenuOpen(false);
     };
@@ -75,6 +96,11 @@ const HamburgerMenu = () => {
     };
 
     const handleDownload = () => {
+        if (!user) {
+            setMobileMenuOpen(false);
+            setIsAuthModalOpen(true);
+            return;
+        }
         setIsDownloading(true);
         const fullHtml = `<!DOCTYPE html>
 <html lang="en">
@@ -98,6 +124,11 @@ const HamburgerMenu = () => {
     };
 
     const handleLayoutChange = (newLayout) => {
+        if (newLayout === 'ai' && !user) {
+            setMobileMenuOpen(false);
+            setIsAuthModalOpen(true);
+            return;
+        }
         setLayout(newLayout);
         setMobileMenuOpen(false);
     };
